@@ -135,7 +135,8 @@ class ListGenome(Genome):
         if te not in self.active_TE:
             return None
         pos = self.nucleotide.index(te)
-        return self.insert_te((pos + offset) % len(self.nucleotide), self.TE[te])
+        res = (pos + offset) % len(self.nucleotide)
+        return self.insert_te(res, self.TE[te])
         
             
 
@@ -147,6 +148,11 @@ class ListGenome(Genome):
         for those.
         """
         self.active_TE.remove(te)
+        for i in range(len(self)):
+            if self.nucleotide[i] == te:
+                for j in range(self.TE[te]):
+                    self.nucleotide[i+j] = 'x'
+                break
 
     def active_tes(self) -> list[int]:
         """Get the active TE IDs."""
@@ -166,7 +172,13 @@ class ListGenome(Genome):
         represented with the character '-', active TEs with 'A', and disabled
         TEs with 'x'.
         """
-        return -1
+        nucleotide = ""
+        for x in self.nucleotide:
+            if isinstance(x, int):
+                nucleotide += "A"
+            else: 
+                nucleotide += str(x)
+        return nucleotide
 
 
 class LinkedListGenome(Genome):
