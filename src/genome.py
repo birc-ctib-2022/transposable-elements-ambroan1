@@ -132,7 +132,11 @@ class ListGenome(Genome):
         wrap around, since the genome is circular.
         If te is not active, return None (and do not copy it).
         """
-        return -1
+        if te not in self.active_TE:
+            return None
+        pos = self.nucleotide.index(te)
+        return self.insert_te((pos + offset) % len(self.nucleotide), self.TE[te])
+        
             
 
     def disable_te(self, te: int) -> None:
@@ -142,7 +146,7 @@ class ListGenome(Genome):
         TEs are already inactive, so there is no need to do anything
         for those.
         """
-        return -1
+        self.active_TE.remove(te)
 
     def active_tes(self) -> list[int]:
         """Get the active TE IDs."""
