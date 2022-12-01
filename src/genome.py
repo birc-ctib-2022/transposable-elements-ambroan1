@@ -92,9 +92,15 @@ class ListGenome(Genome):
     Implements the Genome interface using Python's built-in lists
     """
 
+    genome : list[str]
+    TE : dict[int,int]
+    TE_ID : int
+
     def __init__(self, n: int):
         """Create a new genome with length n."""
-        ...  # FIXME
+        self.genome = ['-']*n #create genome
+        self.TE = {} 
+        self.TE_ID = 1
 
     def insert_te(self, pos: int, length: int) -> int:
         """
@@ -109,8 +115,15 @@ class ListGenome(Genome):
 
         Returns a new ID for the transposable element.
         """
-        ...  # FIXME
-        return -1
+        
+        if self.genome[pos] in self.TE:
+            del self.TE[self.genome[pos]]
+        TE_ID = self.TE_ID
+        self.TE_ID = self.TE_ID + 1
+        self.TE[TE_ID] = length
+        self.genome[pos] = [TE_ID] * length
+        return TE_ID
+
 
     def copy_te(self, te: int, offset: int) -> int | None:
         """
@@ -126,7 +139,7 @@ class ListGenome(Genome):
 
         If te is not active, return None (and do not copy it).
         """
-        ...  # FIXME
+        return -1
 
     def disable_te(self, te: int) -> None:
         """
@@ -136,17 +149,16 @@ class ListGenome(Genome):
         TEs are already inactive, so there is no need to do anything
         for those.
         """
-        ...  # FIXME
+        return -1
+
 
     def active_tes(self) -> list[int]:
         """Get the active TE IDs."""
-        ...  # FIXME
-        return []
+        return -1
 
     def __len__(self) -> int:
         """Current length of the genome."""
-        ...  # FIXME
-        return 0
+        return -1
 
     def __str__(self) -> str:
         """
@@ -160,7 +172,7 @@ class ListGenome(Genome):
         represented with the character '-', active TEs with 'A', and disabled
         TEs with 'x'.
         """
-        return "FIXME"
+        return -1
 
 
 class LinkedListGenome(Genome):
