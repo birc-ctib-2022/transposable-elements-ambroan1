@@ -1,0 +1,53 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.0, pytest-7.2.0, pluggy-1.0.0
+rootdir: C:\Users\Aneta\github-classroom\birc-ctib-2022\transposable-elements-ambroan1
+collected 2 items
+
+src\test_genome.py .F                                                    [100%]
+
+================================== FAILURES ===================================
+___________________________ test_linked_list_genome ___________________________
+
+    def test_linked_list_genome() -> None:
+        """Test that the linked list implementation works."""
+>       run_genome_test(LinkedListGenome)
+
+src\test_genome.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\test_genome.py:31: in run_genome_test
+    assert 3 == genome.copy_te(2, 20)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <genome.LinkedListGenome object at 0x00000236D3DF0E50>, te = 2
+offset = 20
+
+    def copy_te(self, te: int, offset: int) -> int | None:
+        """
+        Copy a transposable element.
+        Copy the transposable element te to an offset from its current
+        location.
+        The offset can be positive or negative; if positive the te is copied
+        upwards and if negative it is copied downwards. If the offset moves
+        the copy left of index 0 or right of the largest index, it should
+        wrap around, since the genome is circular.
+        If te is not active, return None (and do not copy it).
+        """
+    
+        if te not in self.active_TE:
+                    return None
+        pos = 0
+        currentNode = self.head
+        # find the first node and position of it, in the target TE.
+        for _ in range(self.length):
+            if currentNode.te_id == te:
+                break
+            currentNode = currentNode.next
+            pos += 1
+    
+>       TE_ID = self.next_TE_id
+E       AttributeError: 'LinkedListGenome' object has no attribute 'next_TE_id'
+
+src\genome.py:280: AttributeError
+=========================== short test summary info ===========================
+FAILED src/test_genome.py::test_linked_list_genome - AttributeError: 'LinkedL...
+========================= 1 failed, 1 passed in 0.21s =========================
