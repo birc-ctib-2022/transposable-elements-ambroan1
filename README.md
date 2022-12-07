@@ -104,61 +104,61 @@ The n is the length of a genome, and m is the length of TE and k is the number o
 
 ## List implementation
 
-#  init
+###  init
 
 O(n)
 
-# insert_te
+### insert_te
 
 O(n + m) + O(disable_te)
 
-# copy_te
+### copy_te
 
 O(insert_te)
 
-# disable_te
+### disable_te
 
 O(1) 
 
-# active_te
+### active_te
 
 O(k)
 
-# len
+### len
 
 O(1)
 
-# str
+### str
 
 O(n)
 
 ## LinkedListGenome
 
-# init
+### init
 
 O(1)
 
-# insert_te
+### insert_te
 
 O(k)
 
-# copy_te
+### copy_te
 
 O(k)
 
-# disable_te
+### disable_te
 
 O(1)
 
-# active_tes
+### active_tes
 
 O(k)
 
-# len
+### len
 
 O(1)
 
-# str
+### str
 
 O(n)
 
