@@ -102,10 +102,10 @@ class ListGenome(Genome):
 
     def __init__(self, n: int):
         """Create a new genome with length n."""
-        #initialize the genome with no TE's yet.
-        self.nucleotide= ['-'] * n
+        
+        self.nucleotide = [0] * n
         self.TE = {}
-        self.active_TE = []
+        self.active_TE = set()
 
     def insert_te(self, pos: int, length: int) -> int:
         """
@@ -117,13 +117,9 @@ class ListGenome(Genome):
         removed from the set of active TEs.
         Returns a new ID for the transposable element.
         """
-
-        if len(self.TE) != 0:
-            TE_ID = max(self.TE) + 1
-        else:
-            TE_ID = 1
+        TE_ID = len(self.TE) + 1
         self.TE[TE_ID] = length
-        self.active_TE.append(TE_ID)
+        self.active_TE.add(TE_ID)
         if self.nucleotide[pos] in self.active_TE:
             self.disable_te(self.nucleotide[pos])
         self.nucleotide[pos:pos] = [TE_ID]*length
@@ -157,15 +153,10 @@ class ListGenome(Genome):
         for those.
         """
         self.active_TE.remove(te)
-        for i in range(len(self)):
-            if self.nucleotide[i] == te:
-                for j in range(self.TE[te]):
-                    self.nucleotide[i+j] = 'x'
-                break
 
     def active_tes(self) -> list[int]:
         """Get the active TE IDs."""
-        return self.active_TE
+        return list(self.active_TE)
 
     def __len__(self) -> int:
         """current_node length of the genome."""
@@ -183,11 +174,14 @@ class ListGenome(Genome):
         """
         nucleotide = ""
         for x in self.nucleotide:
-            if isinstance(x, int):
+            if x > 0 and (x in self.active_TE):
                 nucleotide += "A"
+            elif x > 0 and (x not in self.active_TE):
+                nucleotide += "x"
             else: 
-                nucleotide += str(x)
+                nucleotide += "-"
         return nucleotide
+
 
 class Link(Generic[T]):
     """Doubly linked link.""" 
@@ -255,10 +249,12 @@ class LinkedListGenome(Genome):
 
     def disable_feature(self, ft):
         ft.val = Ft(2, ft.val.length)
-        for identifier, disable in self.active.items():
-            if disable is ft:
-                self.active.pop(identifier)
-                break
+        val_list = list(self.active.values())
+        key_list = list(self.active.keys())
+        position = val_list.index(ft)
+        self.active.pop(key_list[position])
+
+        
 
 
     def copy_te(self, te: int, offset: int) -> int | None:
@@ -282,9 +278,9 @@ class LinkedListGenome(Genome):
         if offset > 0:
             offset = offset - temp.val.length
             while offset > 0:
-                ft = getattr(ft, "next")
+                ft = ft.next
                 if ft is self.head:
-                    ft = getattr(ft, "next")
+                    ft = ft.next
                 offset -= ft.val.length
             half_1 = offset + ft.val.length
             half_2 = abs(offset)
@@ -292,9 +288,9 @@ class LinkedListGenome(Genome):
         else:
             offset *= -1
             while offset > 0:
-                ft = getattr(ft, "prev")
+                ft = ft.prev
                 if ft is self.head:
-                    ft = getattr(ft, "prev")
+                    ft = ft.prev
                 offset -= ft.val.length
             self.insert_te_at_pos(temp.val.length, ft, abs(offset), offset + ft.val.length)
         return self.counter
