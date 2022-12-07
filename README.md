@@ -100,6 +100,68 @@ You are free to implement the genome classes however you want, and using whateer
 
 When you have implemented the two (or more) classes, describe the complexity of each operation as a function of the genome size (at the time of the operation), and the size of the TE involved (and when copying, the offset you are copying). Put the description here:
 
-**FIXME: OPERATION COMPLEXITY**
+The n is the length of a genome, and m is the length of TE and k is the number of TEs in the genome:
+
+## List implementation
+
+###  init
+
+O(n)
+
+### insert_te
+
+O(n + m) + O(disable_te)
+
+### copy_te
+
+O(insert_te)
+
+### disable_te
+
+O(1) 
+
+### active_te
+
+O(k)
+
+### len
+
+O(1)
+
+### str
+
+O(n)
+
+## LinkedListGenome
+
+### init
+
+O(1)
+
+### insert_te
+
+O(k)
+
+### copy_te
+
+O(k)
+
+### disable_te
+
+O(1)
+
+### active_tes
+
+O(k)
+
+### len
+
+O(1)
+
+### str
+
+O(n)
+
+Based on this, I would think that the implementation with linked list is going to be faster.
 
 In `src/simulate.py` you will find a program that can run simulations and tell you actual time it takes to simulate with different implementations. You can use it to test your analysis. You can modify the parameters to the simulator if you want to explore how they affect the running time.
